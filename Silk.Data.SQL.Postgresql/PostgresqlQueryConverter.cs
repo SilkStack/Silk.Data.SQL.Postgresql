@@ -106,19 +106,6 @@ namespace Silk.Data.SQL.Postgresql
 			{
 				switch (queryExpression)
 				{
-					case CreateTableExpression create:
-						Sql.Append($"CREATE TABLE {Converter.QuoteIdentifier(create.TableName)} (");
-						VisitExpressionGroup(create.ColumnDefinitions, ExpressionGroupType.ColumnDefinitions);
-						var primaryKeyColumnNames = create.ColumnDefinitions
-								.Where(q => q.IsPrimaryKey)
-								.Select(q => Converter.QuoteIdentifier(q.ColumnName))
-								.ToArray();
-						if (primaryKeyColumnNames.Length > 0)
-						{
-							Sql.Append($", CONSTRAINT {Converter.QuoteIdentifier($"PK_{create.TableName}")} PRIMARY KEY ({string.Join(",", primaryKeyColumnNames)})");
-						}
-						Sql.Append(")");
-						break;
 					case PostgresqlRawSqlExpression rawExpression:
 						Sql.Append(rawExpression.SqlText);
 						break;
